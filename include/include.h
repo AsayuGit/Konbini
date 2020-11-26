@@ -1,7 +1,18 @@
-#ifndef _INCLUDE
-#define _INCLUDE
+#ifndef _INCLUDE_H
+#define _INCLUDE_H
+
+#ifdef _WIN32
+    #define CLEAR "cls"
+#else
+    #define CLEAR "clear"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "types.h"
+
+#include "text.h"
+#include "globalFunctions.h"
 
 #endif

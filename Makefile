@@ -4,7 +4,7 @@ INCLUDES = \
 SOURCES = \
 		src/*.c
 
-FILENAME = MAIN
+FILENAME = Konbini
 
 LINUX_DEFINES = \
 			_POSIX

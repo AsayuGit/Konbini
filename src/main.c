@@ -1,9 +1,12 @@
 #include <include.h>
-
+#include "menus.h"
 
 int main (int argc, char* argv[]){
 
-    printf("Hello, WORLD!\n");
+    void* (*NextMenu)() = MainMenu;
+    while (NextMenu != NULL){
+        NextMenu = NextMenu();
+    }
 
     return 0;
 }
