@@ -43,14 +43,32 @@ void* MainMenu(){
 int CategoryMenu(){
     int i;
     int userSelection;
+    IntList_t* CategoryList;
+    IntList_t* DisplayList;
     
+    CategoryList = NULL;
+
+    // We build a list of every category with available Items
+    for (i = 0; i < CATALOGUE_SIZE; i++){
+        if (SearchDataInList(CategoryList, Catalogue[i].MainCategory) == NULL){
+            AddElementToIntList(&CategoryList, Catalogue[i].MainCategory);
+        }
+    }
+    if (!CategoryList){ // If No Item available
+        return -1;
+    }
+
     while (1){
         system(CLEAR);
         printf("%s\n\n", labels[CatalogueTile]);
 
         drawLine(23);
-        for (i = 0; i < NbOfCategories; i++){
-            printf("// %d) %s //\n", i + 1, CategoryLabel[i]);
+        DisplayList = CategoryList;
+        i = 0;
+        while (DisplayList != NULL){
+            printf("// %d) %s //\n", i + 1, CategoryLabel[DisplayList->Data]);
+            DisplayList = DisplayList->next;
+            i++;
         }
         drawLine(23);
         
@@ -58,7 +76,10 @@ int CategoryMenu(){
 
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= NbOfCategories))){
-            return userSelection - 1;
+            DisplayList = GetItemInList(CategoryList, userSelection - 1);
+            userSelection = DisplayList->Data;
+            free(CategoryList);
+            return userSelection;
             break;
         }else{
             clear();
@@ -80,7 +101,6 @@ int SubCategoryMenu(CategoryID CategoryID){
     for (i = 0; i < CATALOGUE_SIZE; i++){
         if (Catalogue[i].MainCategory == CategoryID) {
             if (SearchDataInList(SubCategoryList, Catalogue[i].SubCategory) == NULL){
-                printf("%s\n", Catalogue[i].ArticleCode);
                 AddElementToIntList(&SubCategoryList, Catalogue[i].SubCategory);
             }
         }
