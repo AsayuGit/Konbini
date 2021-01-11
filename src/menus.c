@@ -60,7 +60,8 @@ int CategoryMenu(){
 
     while (1){
         system(CLEAR);
-        printf("%s\n\n", labels[CatalogueTile]);
+        printf("%s\n", labels[CatalogueTile]);
+        printf(">> ?\n\n");
 
         drawLine(23);
         DisplayList = CategoryList;
@@ -72,7 +73,7 @@ int CategoryMenu(){
         }
         drawLine(23);
         
-        printf("\nPlease select a category : ");
+        printf("\n%s", labels[CatalogueCategorySelect]);
 
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= NbOfCategories))){
@@ -111,7 +112,8 @@ int SubCategoryMenu(CategoryID CategoryID){
     
     while (1){
         system(CLEAR);
-        printf("%s\n\n", labels[CatalogueTile]);
+        printf("%s\n", labels[CatalogueTile]);
+        printf(">> %s / ?\n\n", CategoryLabel[CategoryID]);
 
         drawLine(23);
         DisplayList = SubCategoryList;
@@ -123,7 +125,7 @@ int SubCategoryMenu(CategoryID CategoryID){
         }
         drawLine(23);
         
-        printf("\nPlease select a sub category : ");
+        printf("\n%s", labels[CatalogueSubCategorySelect]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
             DisplayList = GetItemInList(SubCategoryList, userSelection - 1);
@@ -169,11 +171,11 @@ void* CatalogueMenu(){
     if (!SelectedItemList){ // If No item match
         return MainMenu;
     }
-    //PrintIntList(SelectedItemList);
 
     while (1){
         system(CLEAR);
-        printf("%s\n\n", labels[CatalogueTile]);
+        printf("%s\n", labels[CatalogueTile]);
+        printf(">> %s / %s / ?\n\n", CategoryLabel[Category], SubCategoryLabel[SubCategory]);
 
         drawLine(23);
         DisplayList = SelectedItemList;
@@ -185,7 +187,7 @@ void* CatalogueMenu(){
         }
         drawLine(23);
         
-        printf("\nPlease select an Item to buy: ");
+        printf("\n%s", labels[CatalogueItemSelect]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
             DisplayList = GetItemInList(SelectedItemList, userSelection - 1);

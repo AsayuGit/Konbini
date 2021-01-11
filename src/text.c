@@ -12,6 +12,9 @@ const char labels[NBOfLabels][50] = {
     "2) Afficher le panier",
     "3) Quitter",
     "-- Catalogue --",
+    "Please select a category : ",
+    "Please select a sub category : ",
+    "Please select an Item to buy: ",
     "Voici les articles actuellement en stock :",
     "-- Panier --"
 };
