@@ -13,6 +13,8 @@
 #include "types.h"
 
 #include "text.h"
+#include "category.h"
+#include "system.h"
 #include "globalFunctions.h"
 
 #endif

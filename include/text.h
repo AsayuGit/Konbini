@@ -8,7 +8,7 @@ typedef enum {
     MainMenuOptionsFirst,
     MainMenuOptionsLast = MainMenuOptionsFirst + 2,
     CatalogueTile,
-    CatalogueGreetings,
+    CatalogueGreetings, // ? TEMP
     CartTile,
     NBOfLabels
 }labelsID;

@@ -3,7 +3,9 @@
 
 #include "include.h"
 
-extern Article Catalogue[10];
+#define CATALOGUE_SIZE 10
+
+extern Article Catalogue[CATALOGUE_SIZE];
 
 void init();
 
