@@ -9,6 +9,7 @@ typedef struct{
     int Year;
 }Date;
 
+// Article Description
 typedef struct{
     char ArticleCode[5];
     char* MarketName;
@@ -20,16 +21,21 @@ typedef struct{
     char SerialNumber[6];
     Date ManifacturingDate;
     double TVA;
+    double Price;
     int Quantity;
 }Article;
 
+// Integer linked List
 typedef struct IntList {
     int Data;
     struct IntList* next;
 }IntList_t;
 
-//typedef struct SubCategory SubCategory;
-//typedef struct MainCategory MainCategory;
-//typedef struct Catalogue Catalogue;
+// Article Linked list (Used for the cart)
+typedef struct ArticleList {
+    Article* Item;
+    int Quantity;
+    struct ArticleList* next;
+}ArticleList_t;
 
 #endif

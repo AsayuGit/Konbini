@@ -8,7 +8,7 @@ const char errorMsg[][50] = {
 
 const char labels[NBOfLabels][50] = {
     "-- Menu Principal --",
-    "1) Acheter un article",
+    "1) Rechercher un article",
     "2) Afficher le panier",
     "3) Quitter",
     "-- Catalogue --",
@@ -16,5 +16,6 @@ const char labels[NBOfLabels][50] = {
     "Please select a sub category : ",
     "Please select an Item to buy: ",
     "Voici les articles actuellement en stock :",
-    "-- Panier --"
+    "-- Panier --",
+    "-- Checkout --"
 };

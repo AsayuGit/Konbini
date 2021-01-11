@@ -1,5 +1,7 @@
 #include "system.h"
 
+ArticleList_t* Cart;
+
 Article Catalogue[CATALOGUE_SIZE] = {
     {
         "00000",
@@ -12,7 +14,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00001",
@@ -25,7 +28,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00002",
@@ -38,7 +42,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00003",
@@ -51,7 +56,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00004",
@@ -64,7 +70,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00005",
@@ -77,7 +84,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00006",
@@ -90,7 +98,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00007",
@@ -103,7 +112,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00008",
@@ -116,7 +126,8 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     },
     {
         "00009",
@@ -129,10 +140,73 @@ Article Catalogue[CATALOGUE_SIZE] = {
         "NA",
         {0, 0, 0},
         0.0,
-        0
+        10.0,
+        50
     }
 };
 
 void init(){
+    Cart = NULL;
+}
 
+ArticleList_t* SearchArticleInCart(Article* ArticleRef){
+    ArticleList_t* CartRef;
+
+    CartRef = Cart;
+    while (CartRef != NULL){ // Search for a free spot
+        if (CartRef->Item == ArticleRef){
+            return CartRef;
+        }else{
+            CartRef = CartRef->next;
+        }
+    }
+    return NULL;
+}
+
+void AddArticleToCart(Article* ArticleRef){
+    ArticleList_t** CartRef;
+    ArticleList_t* SearchRef;
+
+    CartRef = &Cart;
+
+    SearchRef = SearchArticleInCart(ArticleRef);
+    if (SearchRef != NULL){
+        SearchRef->Quantity++;
+    }else{
+        // If the Item doesn't exists in the list
+        while ((*CartRef) != NULL){ // Search for a free spot
+            CartRef = &((*CartRef)->next);
+        }
+        (*CartRef) = (ArticleList_t*)malloc(sizeof(ArticleList_t));
+        (*CartRef)->Item = ArticleRef;
+        (*CartRef)->Quantity = 1;
+        (*CartRef)->next = NULL;
+    }
+}
+
+void DisplayCartContent(){
+    int i = 0;
+    ArticleList_t* CartRef;
+
+    drawLine(89);
+    printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity //\n");
+    
+    CartRef = Cart;
+    while (CartRef != NULL){
+        printf("// %d) // %s // %s // %s %s // %s // %s // %s //\n", i, 
+        CartRef->Item->ArticleCode, CartRef->Item->Brand, CartRef->Item->CommunName,
+        CartRef->Item->MarketName, CartRef->Item->SerialNumber, "DATE", "XXX");
+        CartRef = CartRef->next;
+    }
+    
+    drawLine(89);
+}
+
+void FreeCart(){
+    while (Cart != NULL){
+        FreeCart(Cart->next);
+    }
+    if (Cart){
+        free(Cart);
+    }
 }

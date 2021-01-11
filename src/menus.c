@@ -141,6 +141,9 @@ int SubCategoryMenu(CategoryID CategoryID){
 
 void BuyMenu(int ItemToBuy){
 
+    system(CLEAR);
+    printf("%s\n", labels[BuyMenuTitle]);
+
     printf("Selected Item : \n");
     printf("%d // %s %s //\n", ItemToBuy, Catalogue[ItemToBuy].MarketName, Catalogue[ItemToBuy].CommunName);
     while(1);
@@ -203,7 +206,8 @@ void* CatalogueMenu(){
         }
     }
 
-    BuyMenu(userSelection);
+    //BuyMenu(userSelection);
+    AddArticleToCart(&(Catalogue[userSelection]));
 
     return MainMenu;
 }
@@ -211,5 +215,11 @@ void* CatalogueMenu(){
 void* CartMenu(){
     system(CLEAR);
     printf("%s\n", labels[CartTile]);
-    return NULL;
+
+    DisplayCartContent();
+    
+    getchar(); // Pause
+    getchar();
+    
+    return MainMenu;
 }

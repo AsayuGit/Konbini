@@ -9,4 +9,9 @@ extern Article Catalogue[CATALOGUE_SIZE];
 
 void init();
 
+void AddArticleToCart(Article* ArticleRef);
+ArticleList_t* SearchArticleInCart(Article* ArticleRef);
+void DisplayCartContent();
+void FreeCart();
+
 #endif

@@ -13,6 +13,7 @@ typedef enum {
     CatalogueItemSelect,
     CatalogueGreetings,
     CartTile,
+    BuyMenuTitle,
     NBOfLabels
 }labelsID;
 
