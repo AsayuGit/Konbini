@@ -177,15 +177,19 @@ void* CatalogueMenu(){
         printf("%s\n", labels[CatalogueTile]);
         printf(">> %s / %s / ?\n\n", CategoryLabel[Category], SubCategoryLabel[SubCategory]);
 
-        drawLine(23);
+        drawLine(89);
+        printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity //\n");
         DisplayList = SelectedItemList;
         i = 0;
         while (DisplayList != NULL){
             i++;
-            printf("// %d) %s //\n", i, Catalogue[DisplayList->Data].ArticleCode);
+            printf("// %d) // %s // %s // %s %s // %s // %s // %s //\n", i, 
+            Catalogue[DisplayList->Data].ArticleCode, Catalogue[DisplayList->Data].Brand, Catalogue[DisplayList->Data].CommunName,
+            Catalogue[DisplayList->Data].MarketName, Catalogue[DisplayList->Data].SerialNumber, "DATE", "XXX");
+
             DisplayList = DisplayList->next;
         }
-        drawLine(23);
+        drawLine(89);
         
         printf("\n%s", labels[CatalogueItemSelect]);
         // SecureInput
