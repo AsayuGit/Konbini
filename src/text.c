@@ -6,7 +6,7 @@ const char errorMsg[][50] = {
 };
 
 
-const char labels[NBOfLabels][50] = {
+const char labels[NBOfLabels][100] = {
     "-- Menu Principal --",
     "1) Rechercher un article",
     "2) Afficher le panier",
@@ -17,5 +17,7 @@ const char labels[NBOfLabels][50] = {
     "Please select an Item to buy: ",
     "Voici les articles actuellement en stock :",
     "-- Panier --",
-    "-- Checkout --"
+    "-- Checkout --",
+    "Press Any key to go back to the main menu",
+    "You're cart's value has reached its max, please checkout"
 };

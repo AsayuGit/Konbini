@@ -2,16 +2,14 @@
 #define _SYSTEM_H
 
 #include "include.h"
-
-#define CATALOGUE_SIZE 10
-
-extern Article Catalogue[CATALOGUE_SIZE];
+#include "catalogue.h"
 
 void init();
 
 void AddArticleToCart(Article* ArticleRef);
 ArticleList_t* SearchArticleInCart(Article* ArticleRef);
 void DisplayCartContent();
+int getCartValue();
 void FreeCart();
 
 #endif

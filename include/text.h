@@ -14,9 +14,11 @@ typedef enum {
     CatalogueGreetings,
     CartTile,
     BuyMenuTitle,
+    ToMainMenu,
+    CartValueMax,
     NBOfLabels
 }labelsID;
 
-extern const char labels[NBOfLabels][50];
+extern const char labels[NBOfLabels][100];
 
 #endif

@@ -1,5 +1,6 @@
 #include "menus.h"
 #include "string.h"
+#include "unistd.h"
 
 void* MainMenu(){
     int i;
@@ -206,8 +207,16 @@ void* CatalogueMenu(){
         }
     }
 
-    //BuyMenu(userSelection);
-    AddArticleToCart(&(Catalogue[userSelection]));
+    if (getCartValue() + Catalogue[userSelection].Price <= CART_MAX_VALUE){
+        AddArticleToCart(&(Catalogue[userSelection]));
+    } else {
+        printf("%s\n", labels[CartValueMax]);
+        #ifdef _WIN32
+            Sleep(3000);
+        #else
+            sleep(3);
+        #endif 
+    }
 
     return MainMenu;
 }
@@ -218,6 +227,8 @@ void* CartMenu(){
 
     DisplayCartContent();
     
+    printf("\n%s\n", labels[ToMainMenu]);
+
     getchar(); // Pause
     getchar();
     

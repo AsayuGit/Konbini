@@ -2,149 +2,6 @@
 
 ArticleList_t* Cart;
 
-Article Catalogue[CATALOGUE_SIZE] = {
-    {
-        "00000",
-        "Colgate",
-        "Dentifrice",
-        CAT_Hygiene,
-        SBCAT_Toothpaste,
-        "Colgate",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00001",
-        "Adidas",
-        "Chaussure",
-        CAT_Clothes,
-        SBCAT_Shoe,
-        "Adidas",
-        ""
-        "",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00002",
-        "Bic",
-        "Stylos",
-        CAT_Stationery,
-        SBCAT_Pen,
-        "Bic",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00003",
-        "Charral",
-        "Beuf",
-        CAT_Food,
-        SBCAT_Meat,
-        "Charral",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00004",
-        "Monoprix",
-        "Carottes",
-        CAT_Food,
-        SBCAT_Vegetables,
-        "Monoprix",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00005",
-        "Harry Potter And the Chamber of Secrets",
-        "Livre",
-        CAT_Culture,
-        SBCAT_Book,
-        "Hachette",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00006",
-        "Acer",
-        "Ordinateur",
-        CAT_Computers,
-        SBCAT_Computers,
-        "Acer",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00007",
-        "Displate",
-        "Poster",
-        CAT_Decoration,
-        SBCAT_Poster,
-        "Displate",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00008",
-        "Razer",
-        "Clavier",
-        CAT_Computers,
-        SBCAT_Keyboard,
-        "Razer",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    },
-    {
-        "00009",
-        "Supreme",
-        "T Shirt",
-        CAT_Clothes,
-        SBCAT_Shirt,
-        "Supreme",
-        "",
-        "NA",
-        {0, 0, 0},
-        0.0,
-        10.0,
-        50
-    }
-};
-
 void init(){
     Cart = NULL;
 }
@@ -185,21 +42,42 @@ void AddArticleToCart(Article* ArticleRef){
 }
 
 void DisplayCartContent(){
-    int i = 0;
+    int i = 1;
+    double CurrentPrice;
+    double Total;
     ArticleList_t* CartRef;
 
+    printf("\n");
     drawLine(89);
-    printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity //\n");
+    printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity // Price //\n");
     
+    Total = 0.0;
     CartRef = Cart;
     while (CartRef != NULL){
-        printf("// %d) // %s // %s // %s %s // %s // %s // %s //\n", i, 
+        CurrentPrice = CartRef->Item->Price * CartRef->Quantity;
+        printf("// %d) // %s // %s // %s %s // %s // %d/%d/%d // %d // %.2lf $ //\n", i, 
         CartRef->Item->ArticleCode, CartRef->Item->Brand, CartRef->Item->CommunName,
-        CartRef->Item->MarketName, CartRef->Item->SerialNumber, "DATE", "XXX");
+        CartRef->Item->MarketName, CartRef->Item->SerialNumber, CartRef->Item->ManifacturingDate.Day, CartRef->Item->ManifacturingDate.Month, CartRef->Item->ManifacturingDate.Year, CartRef->Quantity, CurrentPrice / 100);
+        Total += CurrentPrice;
         CartRef = CartRef->next;
+        i++;
     }
-    
+
     drawLine(89);
+    printf("\nYour cart total is : %.2lf $\n", Total / 100);
+}
+
+int getCartValue(){
+    int Total;
+    ArticleList_t* CartRef;
+
+    Total = 0;
+    CartRef = Cart;
+    while (CartRef != NULL){
+        Total += CartRef->Item->Price * CartRef->Quantity;
+    }
+
+    return Total;
 }
 
 void FreeCart(){

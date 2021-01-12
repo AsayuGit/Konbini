@@ -21,7 +21,7 @@ typedef struct{
     char SerialNumber[6];
     Date ManifacturingDate;
     double TVA;
-    double Price;
+    unsigned int Price;
     int Quantity;
 }Article;
 
