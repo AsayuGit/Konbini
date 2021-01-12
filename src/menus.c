@@ -222,15 +222,45 @@ void* CatalogueMenu(){
 }
 
 void* CartMenu(){
-    system(CLEAR);
-    printf("%s\n", labels[CartTile]);
+    int userSelection;
+    int i;
 
-    DisplayCartContent();
-    
-    printf("\n%s\n", labels[ToMainMenu]);
+    while(1){
 
-    getchar(); // Pause
-    getchar();
+        // Display    
+        system(CLEAR);
+        printf("%s\n", labels[CartTile]);
+
+        DisplayCartContent();
+
+        printf("\n");
+        for (i = CartMenuOptionsFirst; i <= CartMenuOptionsLast; i++){
+            printf("%s\n", labels[i]);
+        }
+        
+        // SecureInput
+        if (scanf("%d", &userSelection) == 1){
+            // Selection logic
+            switch (userSelection)
+            {
+            case 1:
+                //return CatalogueMenu;
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                return MainMenu;
+                break;
+            
+            default:
+                break;
+            }
+        }else{
+            clear();
+        }
+    }
     
     return MainMenu;
 }

@@ -16,6 +16,8 @@ typedef enum {
     BuyMenuTitle,
     ToMainMenu,
     CartValueMax,
+    CartMenuOptionsFirst,
+    CartMenuOptionsLast = CartMenuOptionsFirst + 2,
     NBOfLabels
 }labelsID;
 

@@ -64,7 +64,7 @@ void DisplayCartContent(){
     }
 
     drawLine(89);
-    printf("\nYour cart total is : %.2lf $\n", Total / 100);
+    printf("\nYour cart total is : %.2lf $ HT\n", Total / 100);
 }
 
 int getCartValue(){
