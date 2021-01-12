@@ -75,6 +75,7 @@ int getCartValue(){
     CartRef = Cart;
     while (CartRef != NULL){
         Total += CartRef->Item->Price * CartRef->Quantity;
+        CartRef = Cart->next;
     }
 
     return Total;

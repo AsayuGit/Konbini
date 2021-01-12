@@ -12,9 +12,9 @@ char* CategoryLabel[NbOfCategories] = {
 };
 
 char* SubCategoryLabel[NbOfSubCategories] = {
-    "Chaussure",
-    "T-Shirt",
-    "Manteau",
+    "Haut",
+    "Bas",
+    "Par-Dessus",
     "Stylo",
     "Papier",
     "Encre",

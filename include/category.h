@@ -14,9 +14,9 @@ typedef enum{
 }CategoryID;
 
 typedef enum{
-    SBCAT_Shoe = 0,
-    SBCAT_Shirt,
-    SBCAT_Coat,
+    SBCAT_Top = 0,
+    SBCAT_Stockings,
+    SBCAT_Over,
     SBCAT_Pen,
     SBCAT_Paper,
     SBCAT_Ink,

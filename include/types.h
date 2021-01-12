@@ -17,8 +17,8 @@ typedef struct{
     CategoryID MainCategory;
     SubCategoryID SubCategory;
     char* Brand;
-    char BarCode[13];
-    char SerialNumber[6];
+    char BarCode[14];
+    char SerialNumber[7];
     Date ManifacturingDate;
     double TVA;
     unsigned int Price;
