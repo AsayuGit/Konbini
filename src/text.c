@@ -25,5 +25,6 @@ const char labels[NBOfLabels][100] = {
     "3) Retourner au menu principal",
     "Il n'y a aucun article dans votre panier",
     "Veuillez selectionner l'article a modifier:",
-    "Article introuvable"
+    "Article introuvable",
+    "Impossible, pas assez d'articles en stock"
 };

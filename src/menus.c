@@ -50,7 +50,7 @@ int CategoryMenu(){
 
     // We build a list of every category with available Items
     for (i = 0; i < CATALOGUE_SIZE; i++){
-        if (SearchDataInList(CategoryList, Catalogue[i].MainCategory) == NULL){
+        if ((SearchDataInList(CategoryList, Catalogue[i].MainCategory) == NULL) && (Catalogue[i].Quantity > 0)){
             AddElementToIntList(&CategoryList, Catalogue[i].MainCategory);
         }
     }
@@ -100,7 +100,7 @@ int SubCategoryMenu(CategoryID CategoryID){
 
     // We build a list of every item meeting the main category
     for (i = 0; i < CATALOGUE_SIZE; i++){
-        if (Catalogue[i].MainCategory == CategoryID) {
+        if ((Catalogue[i].MainCategory == CategoryID) && (Catalogue[i].Quantity > 0)) {
             if (SearchDataInList(SubCategoryList, Catalogue[i].SubCategory) == NULL){
                 AddElementToIntList(&SubCategoryList, Catalogue[i].SubCategory);
             }
@@ -186,9 +186,9 @@ void* CatalogueMenu(){
         i = 0;
         while (DisplayList != NULL){
             i++;
-            printf("// %d) // %s // %s // %s %s // %s // %s // %s //\n", i, 
+            printf("// %d) // %s // %s // %s %s // %s // %s // %d //\n", i, 
             Catalogue[DisplayList->Data].ArticleCode, Catalogue[DisplayList->Data].Brand, Catalogue[DisplayList->Data].CommunName,
-            Catalogue[DisplayList->Data].MarketName, Catalogue[DisplayList->Data].SerialNumber, "DATE", "XXX");
+            Catalogue[DisplayList->Data].MarketName, Catalogue[DisplayList->Data].SerialNumber, "DATE", Catalogue[DisplayList->Data].Quantity);
 
             DisplayList = DisplayList->next;
         }
@@ -208,6 +208,7 @@ void* CatalogueMenu(){
 
     if (getCartValue() + Catalogue[userSelection].Price <= CART_MAX_VALUE){
         AddArticleToCart(&(Catalogue[userSelection]));
+        Catalogue[userSelection].Quantity--;
     } else {
         printf("\n%s\n", labels[CartValueMax]);
         CrossSleep(1);
@@ -219,6 +220,7 @@ void* CatalogueMenu(){
 void* CartMenu(){
     int mode;
     ArticleList_t* selectedItem;
+    int* CatalogueQuantity;
     int userSelection;
     int PreviousQuantity;
     int i;
@@ -282,16 +284,34 @@ void* CartMenu(){
             case 2:
                 printf("Actuellement votre panier contient %d %s\nVeuiller entrer la nouvelle quantité (0 pour supprimer l'article) : ", selectedItem->Quantity, selectedItem->Item->MarketName);
                 if ((scanf("%d", &userSelection) == 1) && (userSelection >= 0)){
+                    CatalogueQuantity = &(selectedItem->Item->Quantity);
                     if (userSelection == 0){ // delete article
+                        (*CatalogueQuantity) += selectedItem->Quantity;
                         DeleteArticleFromCart(selectedItem);
                     } else {
-                        PreviousQuantity = selectedItem->Quantity;
-                        selectedItem->Quantity = userSelection;
-                        if (getCartValue() > CART_MAX_VALUE){
-                           selectedItem->Quantity = PreviousQuantity;
-                           printf("\n%s\n", labels[CartValueMax]); 
-                           CrossSleep(1);
+                        // Over stock protection
+                        if (userSelection > selectedItem->Quantity){
+                            if ((*CatalogueQuantity) - (userSelection - selectedItem->Quantity) < 0){
+                                printf("\n%s\n", labels[NotEnoughStock]);
+                                CrossSleep(1);
+                            }else{
+                                // Over Value protection
+                                PreviousQuantity = selectedItem->Quantity;
+                                selectedItem->Quantity = userSelection;
+                                if (getCartValue() > CART_MAX_VALUE){
+                                    selectedItem->Quantity = PreviousQuantity;
+                                    printf("\n%s\n", labels[CartValueMax]); 
+                                    CrossSleep(1);
+                                } else {
+                                    // All clear
+                                    (*CatalogueQuantity) -= (userSelection - PreviousQuantity);
+                                }
+                            }
+                        } else if (userSelection < selectedItem->Quantity){
+                            (*CatalogueQuantity) += (selectedItem->Quantity - userSelection);
+                            selectedItem->Quantity = userSelection;
                         }
+                        // There's no need to do anything if the the userSelection is the same as the current selectedItem->Quantity
                     }
                     mode = 0; // return to "Main menu"
                 } else {

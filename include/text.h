@@ -21,6 +21,7 @@ typedef enum {
     EmptyCart,
     ModArticleSelect,
     ArticleNotFound,
+    NotEnoughStock,
     NBOfLabels
 }labelsID;
 
