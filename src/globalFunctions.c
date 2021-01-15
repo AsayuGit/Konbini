@@ -1,4 +1,5 @@
 #include "globalFunctions.h"
+#include "unistd.h"
 
 void SetCursorAt(int X, int Y){
     printf("\033[%d;%dH", Y, X);

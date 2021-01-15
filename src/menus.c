@@ -1,6 +1,5 @@
 #include "menus.h"
 #include "string.h"
-#include "unistd.h"
 
 void* MainMenu(){
     int i;
@@ -221,6 +220,7 @@ void* CartMenu(){
     int mode;
     ArticleList_t* selectedItem;
     int userSelection;
+    int PreviousQuantity;
     int i;
 
     mode = 0;
@@ -281,11 +281,17 @@ void* CartMenu(){
             
             case 2:
                 printf("Actuellement votre panier contient %d %s\nVeuiller entrer la nouvelle quantité (0 pour supprimer l'article) : ", selectedItem->Quantity, selectedItem->Item->MarketName);
-                if (scanf("%d", &userSelection) == 1){
+                if ((scanf("%d", &userSelection) == 1) && (userSelection >= 0)){
                     if (userSelection == 0){ // delete article
                         DeleteArticleFromCart(selectedItem);
                     } else {
+                        PreviousQuantity = selectedItem->Quantity;
                         selectedItem->Quantity = userSelection;
+                        if (getCartValue() > CART_MAX_VALUE){
+                           selectedItem->Quantity = PreviousQuantity;
+                           printf("\n%s\n", labels[CartValueMax]); 
+                           CrossSleep(1);
+                        }
                     }
                     mode = 0; // return to "Main menu"
                 } else {
