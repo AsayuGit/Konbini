@@ -22,7 +22,7 @@ typedef struct{
     Date ManifacturingDate;
     double TVA;
     unsigned int Price;
-    int Quantity; // Ultimately Temporary
+    int Quantity;
 }Article;
 
 // Integer linked List

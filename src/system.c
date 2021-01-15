@@ -27,7 +27,7 @@ ArticleList_t** AddItemToArticleList(ArticleList_t** ArticleList, Article* Item)
     }
     (*ArticleList) = (ArticleList_t*)malloc(sizeof(ArticleList_t));
     (*ArticleList)->Item = Item;
-    (*ArticleList)->Quantity = 1; // Ajustements needed
+    (*ArticleList)->Quantity = Item->Quantity; // Ajustements needed
     (*ArticleList)->next = NULL;
 
     return ArticleList;

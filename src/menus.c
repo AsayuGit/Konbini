@@ -70,7 +70,7 @@ IntTree_t* CategoryMenu(IntTree_t* CategoryPointer, char** DisplayLabel){
     }
 }
 
-void BuyMenu(int ItemToBuy){
+void BuyMenu(int ItemToBuy){ // Billing Process
 
     system(CLEAR);
     printf("%s\n", labels[BuyMenuTitle]);
@@ -122,8 +122,13 @@ void* CatalogueMenu(){
     }
 
     if (getCartValue() + DisplayList->Item->Price <= CART_MAX_VALUE){
-        AddArticleToCart(DisplayList->Item);
-        (DisplayList->Item->Quantity)--;
+        if (DisplayList->Item->Quantity > 0){
+            (DisplayList->Item->Quantity)--;
+            AddArticleToCart(DisplayList->Item);
+        } else {
+            printf("\n%s\n", labels[NotEnoughStock]);
+            CrossSleep(1);
+        }
     } else {
         printf("\n%s\n", labels[CartValueMax]);
         CrossSleep(1);
