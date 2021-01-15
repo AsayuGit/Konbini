@@ -2,9 +2,90 @@
 
 ArticleList_t* Cart;
 
-void init(){
-    Cart = NULL;
+IntTree_t** AddNodeToIntTree(IntTree_t** Tree, int Data){
+    while ((*Tree) != NULL){ // Search through the OptimisedDatabase
+        if ((*Tree)->Data == Data){ // If the category already exists
+            break; // then we stop searching
+        }
+        // Else we continue searching
+        Tree = (IntTree_t**)&((*Tree)->LeftChild);
+    }
+
+    if ((*Tree) == NULL){ // If the category doesn't exists yet
+        // We create it
+        (*Tree) = (IntTree_t*)malloc(sizeof(IntTree_t));
+        (*Tree)->Data = Data;
+        (*Tree)->LeftChild = NULL;
+        (*Tree)->RightChild = NULL;
+    }
+    return Tree;
 }
+
+ArticleList_t** AddItemToArticleList(ArticleList_t** ArticleList, Article* Item){
+    while ((*ArticleList) != NULL){ // Search for a free spot
+        ArticleList = &((*ArticleList)->next);
+    }
+    (*ArticleList) = (ArticleList_t*)malloc(sizeof(ArticleList_t));
+    (*ArticleList)->Item = Item;
+    (*ArticleList)->Quantity = 1; // Ajustements needed
+    (*ArticleList)->next = NULL;
+
+    return ArticleList;
+}
+
+void InitCatalogue(IntTree_t** OptimizedDatabase, Article* Database){
+    int i;
+    IntTree_t** MainCategoryPointer;
+    IntTree_t** SubCategoryPointer;
+
+    for (i = 0; i < CATALOGUE_SIZE; i++){ // For each article in the database
+        
+        // If the category doesn't exists -> Create it
+        MainCategoryPointer = AddNodeToIntTree(OptimizedDatabase, Catalogue[i].MainCategory);
+        // If the sub category doesn't exists -> Cteate it
+        SubCategoryPointer = AddNodeToIntTree((IntTree_t**)&((*MainCategoryPointer)->RightChild), Catalogue[i].SubCategory);
+
+        // Then we add it to the corresponding article list
+        AddItemToArticleList((ArticleList_t**)&((*SubCategoryPointer)->RightChild), &(Catalogue[i]));
+    }
+}
+
+void init(){ // Init Cart and Init Categorry list
+    Cart = NULL;
+    CategorisedCatalogue = NULL;
+
+    InitCatalogue(&CategorisedCatalogue, Catalogue);
+}
+
+ArticleList_t* GetItemFromArticleList(ArticleList_t* List, int ArticleID){
+    int i;
+
+    for (i = 0; i < ArticleID; i++){
+        if (List == NULL){
+            break;
+        }else{
+            List = List->next;
+        }
+    }
+
+    return List;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ArticleList_t* SearchArticleInCart(Article* ArticleRef){
     ArticleList_t* CartRef;

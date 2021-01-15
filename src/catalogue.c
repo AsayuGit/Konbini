@@ -1,5 +1,7 @@
 #include "catalogue.h"
 
+IntTree_t* CategorisedCatalogue;
+
 Article Catalogue[CATALOGUE_SIZE] = {
     {
         "AF01",

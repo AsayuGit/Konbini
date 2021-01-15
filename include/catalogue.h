@@ -3,6 +3,7 @@
 
 #include "include.h"
 
+extern IntTree_t* CategorisedCatalogue;
 extern Article Catalogue[CATALOGUE_SIZE];
 
 #endif

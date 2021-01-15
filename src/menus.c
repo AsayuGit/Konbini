@@ -40,98 +40,29 @@ void* MainMenu(){
     }
 }
 
-int CategoryMenu(){
+IntTree_t* CategoryMenu(IntTree_t* CategoryPointer, char** DisplayLabel){
     int i;
     int userSelection;
-    IntList_t* CategoryList;
-    IntList_t* DisplayList;
-    
-    CategoryList = NULL;
-
-    // We build a list of every category with available Items
-    for (i = 0; i < CATALOGUE_SIZE; i++){
-        if ((SearchDataInList(CategoryList, Catalogue[i].MainCategory) == NULL) && (Catalogue[i].Quantity > 0)){
-            AddElementToIntList(&CategoryList, Catalogue[i].MainCategory);
-        }
-    }
-    if (!CategoryList){ // If No Item available
-        return -1;
-    }
-
-    while (1){
-        system(CLEAR);
-        printf("%s\n", labels[CatalogueTile]);
-        printf(">> ?\n\n");
-
-        drawLine(23);
-        DisplayList = CategoryList;
-        i = 0;
-        while (DisplayList != NULL){
-            printf("// %d) %s //\n", i + 1, CategoryLabel[DisplayList->Data]);
-            DisplayList = DisplayList->next;
-            i++;
-        }
-        drawLine(23);
-        
-        printf("\n%s", labels[CatalogueCategorySelect]);
-
-        // SecureInput
-        if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= NbOfCategories))){
-            DisplayList = GetItemInList(CategoryList, userSelection - 1);
-            userSelection = DisplayList->Data;
-            free(CategoryList);
-            return userSelection;
-            break;
-        }else{
-            clear();
-        }
-    }
-
-    return 0;
-}
-
-int SubCategoryMenu(CategoryID CategoryID){
-    int i;
-    int userSelection;
-    IntList_t* SubCategoryList;
-    IntList_t* DisplayList;
-
-    SubCategoryList = NULL;
-
-    // We build a list of every item meeting the main category
-    for (i = 0; i < CATALOGUE_SIZE; i++){
-        if ((Catalogue[i].MainCategory == CategoryID) && (Catalogue[i].Quantity > 0)) {
-            if (SearchDataInList(SubCategoryList, Catalogue[i].SubCategory) == NULL){
-                AddElementToIntList(&SubCategoryList, Catalogue[i].SubCategory);
-            }
-        }
-    }
-    if (!SubCategoryList){ // If No item match the sub category
-        return -1;
-    }
+    IntTree_t* DisplayTree;
     
     while (1){
         system(CLEAR);
-        printf("%s\n", labels[CatalogueTile]);
-        printf(">> %s / ?\n\n", CategoryLabel[CategoryID]);
+        printf("%s\n\n", labels[CatalogueTile]);
 
         drawLine(23);
-        DisplayList = SubCategoryList;
+        DisplayTree = CategoryPointer;
         i = 0;
-        while (DisplayList != NULL){
+        while (DisplayTree != NULL){
             i++;
-            printf("// %d) %s //\n", i, SubCategoryLabel[DisplayList->Data]);
-            DisplayList = DisplayList->next;
+            printf("// %d) %s //\n", i, DisplayLabel[DisplayTree->Data]);
+            DisplayTree = DisplayTree->LeftChild;
         }
         drawLine(23);
         
         printf("\n%s", labels[CatalogueSubCategorySelect]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
-            DisplayList = GetItemInList(SubCategoryList, userSelection - 1);
-            userSelection = DisplayList->Data;
-            free(SubCategoryList);
-            return userSelection;
+            return GetItemInLeftTree(CategoryPointer, userSelection - 1);
             break;
         }else{
             clear();
@@ -153,42 +84,28 @@ void* CatalogueMenu(){
     int i;
     int userSelection;
 
-    int Category;
-    int SubCategory;
+    IntTree_t* CategoryPointer;
+    IntTree_t* SubCategoryPointer;
 
-    IntList_t* SelectedItemList;
-    IntList_t* DisplayList;
+    ArticleList_t* DisplayList;
 
-    Category = CategoryMenu();
-    if (CategoryMenu){
-        SubCategory = SubCategoryMenu(Category);
-    }
-
-    // We build a list of every item meeting the main and secondary category
-    SelectedItemList = NULL;
-    for (i = 0; i < CATALOGUE_SIZE; i++){
-        if ((Catalogue[i].MainCategory == Category) && (Catalogue[i].SubCategory == SubCategory)){
-            AddElementToIntList(&SelectedItemList, i);
-        }
-    }
-    if (!SelectedItemList){ // If No item match
-        return MainMenu;
-    }
+    CategoryPointer = CategoryMenu(CategorisedCatalogue, CategoryLabel);
+    SubCategoryPointer = CategoryMenu(CategoryPointer->RightChild, SubCategoryLabel);
 
     while (1){
         system(CLEAR);
-        printf("%s\n", labels[CatalogueTile]);
-        printf(">> %s / %s / ?\n\n", CategoryLabel[Category], SubCategoryLabel[SubCategory]);
+        printf("%s\n\n", labels[CatalogueTile]);
+        //printf(">> %s / %s / ?\n\n", CategoryLabel[Category], SubCategoryLabel[SubCategory]);
 
         drawLine(89);
         printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity //\n");
-        DisplayList = SelectedItemList;
+        DisplayList = (ArticleList_t*)(SubCategoryPointer->RightChild);
         i = 0;
         while (DisplayList != NULL){
             i++;
             printf("// %d) // %s // %s // %s %s // %s // %s // %d //\n", i, 
-            Catalogue[DisplayList->Data].ArticleCode, Catalogue[DisplayList->Data].Brand, Catalogue[DisplayList->Data].CommunName,
-            Catalogue[DisplayList->Data].MarketName, Catalogue[DisplayList->Data].SerialNumber, "DATE", Catalogue[DisplayList->Data].Quantity);
+            DisplayList->Item->ArticleCode, DisplayList->Item->Brand, DisplayList->Item->CommunName,
+            DisplayList->Item->MarketName, DisplayList->Item->SerialNumber, "DATE", DisplayList->Item->Quantity);
 
             DisplayList = DisplayList->next;
         }
@@ -197,18 +114,16 @@ void* CatalogueMenu(){
         printf("\n%s", labels[CatalogueItemSelect]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
-            DisplayList = GetItemInList(SelectedItemList, userSelection - 1);
-            userSelection = DisplayList->Data;
-            free(SelectedItemList);
+            DisplayList = GetItemFromArticleList((ArticleList_t*)(SubCategoryPointer->RightChild), userSelection - 1);
             break;
         }else{
             clear();
         }
     }
 
-    if (getCartValue() + Catalogue[userSelection].Price <= CART_MAX_VALUE){
-        AddArticleToCart(&(Catalogue[userSelection]));
-        Catalogue[userSelection].Quantity--;
+    if (getCartValue() + DisplayList->Item->Price <= CART_MAX_VALUE){
+        AddArticleToCart(DisplayList->Item);
+        (DisplayList->Item->Quantity)--;
     } else {
         printf("\n%s\n", labels[CartValueMax]);
         CrossSleep(1);

@@ -17,4 +17,6 @@ IntList_t* SearchDataInList(IntList_t* List, int Data);
 IntList_t* GetItemInList(IntList_t* List, int ID);
 void FreeIntList(IntList_t* List);
 
+IntTree_t* GetItemInLeftTree(IntTree_t* Tree, int ID);
+
 #endif

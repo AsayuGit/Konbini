@@ -5,6 +5,7 @@
 #include "catalogue.h"
 
 void init();
+ArticleList_t* GetItemFromArticleList(ArticleList_t* List, int ArticleID);
 
 void AddArticleToCart(Article* ArticleRef);
 void DeleteArticleFromCart(ArticleList_t* ArticleRef);

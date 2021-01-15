@@ -48,7 +48,7 @@ void PrintIntList(IntList_t* List){
 }
 
 IntList_t* SearchDataInList(IntList_t* List, int Data){
-    while (List != NULL){ // Search for a free spot
+    while (List != NULL){
         if (List->Data == Data){
             return List;
         }else{
@@ -64,6 +64,14 @@ IntList_t* GetItemInList(IntList_t* List, int ID){
         List = List->next;
     }
     return List;
+}
+
+IntTree_t* GetItemInLeftTree(IntTree_t* Tree, int ID){
+    int i;
+    for (i = 0; i < ID; i++){
+        Tree =Tree->LeftChild;
+    }
+    return Tree;
 }
 
 void FreeIntList(IntList_t* List){

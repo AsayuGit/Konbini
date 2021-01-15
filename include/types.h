@@ -22,7 +22,7 @@ typedef struct{
     Date ManifacturingDate;
     double TVA;
     unsigned int Price;
-    int Quantity;
+    int Quantity; // Ultimately Temporary
 }Article;
 
 // Integer linked List
@@ -37,5 +37,25 @@ typedef struct ArticleList {
     int Quantity;
     struct ArticleList* next;
 }ArticleList_t;
+
+// Category binary trees
+/*
+typedef struct SubCategoryList {
+    int SubCagegory;
+    ArticleList_t* AList;
+    struct SubCategoryList* next;
+}SubCategoryList_t;
+
+typedef struct CategoryList {
+    int Category;
+    struct SubCategoryList* SubCategoryList;
+    struct CategoryList* next;
+}CategoryList_t;*/
+
+typedef struct IntTree {
+    int Data;
+    void* LeftChild;
+    void* RightChild;
+}IntTree_t;
 
 #endif
