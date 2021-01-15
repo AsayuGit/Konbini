@@ -22,5 +22,8 @@ const char labels[NBOfLabels][100] = {
     "You're cart's value has reached its max, please checkout",
     "1) Modifier un article",
     "2) Passer au paiement",
-    "3) Retourner au menu principal"
+    "3) Retourner au menu principal",
+    "Il n'y a aucun article dans votre panier",
+    "Veuillez selectionner l'article a modifier:",
+    "Article introuvable"
 };

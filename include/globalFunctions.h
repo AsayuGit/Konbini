@@ -7,6 +7,8 @@ void SetCursorAt(int X, int Y);
 void clear();
 void drawLine(int Length);
 
+void CrossSleep(int Seconds);
+
 // Linked list
 void AddElementToIntList(IntList_t** List, int Data);
 void PrintIntList(IntList_t* List);

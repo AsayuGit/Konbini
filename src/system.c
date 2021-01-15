@@ -20,6 +20,22 @@ ArticleList_t* SearchArticleInCart(Article* ArticleRef){
     return NULL;
 }
 
+ArticleList_t* GetItemFromCart(int ArticleID){
+    ArticleList_t* CartRef;
+    int i;
+
+    CartRef = Cart;
+    for (i = 0; i < ArticleID; i++){
+        if (CartRef == NULL){
+            break;
+        }else{
+            CartRef = CartRef->next;
+        }
+    }
+    
+    return CartRef;
+}
+
 void AddArticleToCart(Article* ArticleRef){
     ArticleList_t** CartRef;
     ArticleList_t* SearchRef;
@@ -38,6 +54,31 @@ void AddArticleToCart(Article* ArticleRef){
         (*CartRef)->Item = ArticleRef;
         (*CartRef)->Quantity = 1;
         (*CartRef)->next = NULL;
+    }
+}
+
+void DeleteArticleFromCart(ArticleList_t* ArticleRef){
+    ArticleList_t* PrevRef;
+    ArticleList_t* SearchRef;
+    
+    SearchRef = Cart;
+    if (SearchRef = ArticleRef){ // If it's the first Item
+        Cart = Cart->next;
+        FreeArticlelistItem(SearchRef);
+    } else {
+        PrevRef = Cart;
+        SearchRef = Cart->next;
+
+        while (SearchRef != NULL){
+            if (SearchRef = ArticleRef){
+                break;
+            }
+            PrevRef = SearchRef;
+            SearchRef = SearchRef->next;
+        }
+
+        PrevRef->next = SearchRef->next;
+        FreeArticlelistItem(SearchRef);
     }
 }
 
@@ -67,6 +108,20 @@ void DisplayCartContent(){
     printf("\nYour cart total is : %.2lf $ HT\n", Total / 100);
 }
 
+int getNbItemInCart(){
+    int NbOfItems;
+    ArticleList_t* CartRef;
+
+    NbOfItems = 0;
+    CartRef = Cart;
+    while (CartRef != NULL){
+        NbOfItems++;
+        CartRef = CartRef->next;
+    }
+
+    return NbOfItems;
+}
+
 int getCartValue(){
     int Total;
     ArticleList_t* CartRef;
@@ -75,10 +130,14 @@ int getCartValue(){
     CartRef = Cart;
     while (CartRef != NULL){
         Total += CartRef->Item->Price * CartRef->Quantity;
-        CartRef = Cart->next;
+        CartRef = CartRef->next;
     }
 
     return Total;
+}
+
+void FreeArticlelistItem(ArticleList_t* ArticleRef){ // Just in case
+    free(ArticleRef);
 }
 
 void FreeCart(){

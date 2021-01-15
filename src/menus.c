@@ -210,55 +210,88 @@ void* CatalogueMenu(){
     if (getCartValue() + Catalogue[userSelection].Price <= CART_MAX_VALUE){
         AddArticleToCart(&(Catalogue[userSelection]));
     } else {
-        printf("%s\n", labels[CartValueMax]);
-        #ifdef _WIN32
-            Sleep(3000);
-        #else
-            sleep(3);
-        #endif 
+        printf("\n%s\n", labels[CartValueMax]);
+        CrossSleep(1);
     }
 
     return MainMenu;
 }
 
 void* CartMenu(){
+    int mode;
+    ArticleList_t* selectedItem;
     int userSelection;
     int i;
 
+    mode = 0;
     while(1){
 
         // Display    
         system(CLEAR);
         printf("%s\n", labels[CartTile]);
-
         DisplayCartContent();
-
         printf("\n");
-        for (i = CartMenuOptionsFirst; i <= CartMenuOptionsLast; i++){
-            printf("%s\n", labels[i]);
-        }
-        
-        // SecureInput
-        if (scanf("%d", &userSelection) == 1){
-            // Selection logic
-            switch (userSelection)
-            {
+
+
+        switch (mode){
+            case 0:
+            for (i = CartMenuOptionsFirst; i <= CartMenuOptionsLast; i++){
+                printf("%s\n", labels[i]);
+            }
+            // SecureInput
+            if (scanf("%d", &userSelection) == 1){
+                // Selection logic
+                switch (userSelection)
+                {
+                case 1: // Mod Article
+                    if (getNbItemInCart() > 0){
+                        mode = 1;
+                    } else {
+                        printf("\n%s\n", labels[EmptyCart]);
+                        CrossSleep(1);
+                    }
+                    break;
+
+                case 2: // Checkout
+                    break;
+
+                case 3:
+                    return MainMenu;
+                    break;
+                }
+            } else {
+                clear();
+            }
+            break;
+            
             case 1:
-                //return CatalogueMenu;
-                break;
-
-            case 2:
-                break;
-
-            case 3:
-                return MainMenu;
+                printf("%s\n", labels[ModArticleSelect]);
+                if ((scanf("%d", &userSelection) == 1) && (userSelection > 0)){
+                    userSelection--;
+                    if ((selectedItem = GetItemFromCart(userSelection)) == NULL){
+                        printf("\n%s\n", labels[ArticleNotFound]);
+                        CrossSleep(1);
+                    } else {
+                        mode = 2;
+                    }
+                }else{
+                    clear();
+                }
                 break;
             
-            default:
+            case 2:
+                printf("Actuellement votre panier contient %d %s\nVeuiller entrer la nouvelle quantité (0 pour supprimer l'article) : ", selectedItem->Quantity, selectedItem->Item->MarketName);
+                if (scanf("%d", &userSelection) == 1){
+                    if (userSelection == 0){ // delete article
+                        DeleteArticleFromCart(selectedItem);
+                    } else {
+                        selectedItem->Quantity = userSelection;
+                    }
+                    mode = 0; // return to "Main menu"
+                } else {
+                    clear();
+                }
                 break;
-            }
-        }else{
-            clear();
         }
     }
     

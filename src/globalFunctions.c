@@ -18,6 +18,14 @@ void drawLine(int Length){
     printf("\n");
 }
 
+void CrossSleep(int Seconds){
+#ifdef _WIN32
+    Sleep(Seconds * 1000);
+#else
+    sleep(Seconds);
+#endif 
+}
+
 void AddElementToIntList(IntList_t** List, int Data){
     if (List != NULL){
         while ((*List) != NULL){ // Search for a free spot

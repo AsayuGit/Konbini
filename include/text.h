@@ -18,6 +18,9 @@ typedef enum {
     CartValueMax,
     CartMenuOptionsFirst,
     CartMenuOptionsLast = CartMenuOptionsFirst + 2,
+    EmptyCart,
+    ModArticleSelect,
+    ArticleNotFound,
     NBOfLabels
 }labelsID;
 
