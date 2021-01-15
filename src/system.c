@@ -62,7 +62,7 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef){
     ArticleList_t* SearchRef;
     
     SearchRef = Cart;
-    if (SearchRef = ArticleRef){ // If it's the first Item
+    if (SearchRef == ArticleRef){ // If it's the first Item
         Cart = Cart->next;
         FreeArticlelistItem(SearchRef);
     } else {
@@ -70,7 +70,7 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef){
         SearchRef = Cart->next;
 
         while (SearchRef != NULL){
-            if (SearchRef = ArticleRef){
+            if (SearchRef == ArticleRef){
                 break;
             }
             PrevRef = SearchRef;
