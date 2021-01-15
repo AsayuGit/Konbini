@@ -22,6 +22,12 @@ typedef enum {
     ModArticleSelect,
     ArticleNotFound,
     NotEnoughStock,
+    CartTotal,
+    BILLFrom,
+    BILLTo,
+    BILLDate,
+    ThanksBuy,
+    BILLNb,
     NBOfLabels
 }labelsID;
 

@@ -13,9 +13,12 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef);
 ArticleList_t* SearchArticleInCart(Article* ArticleRef);
 ArticleList_t* GetItemFromCart(int ArticleID);
 void DisplayCartContent();
-int getCartValue();
+int GetTTCArticleListPrice(ArticleList_t* CartRef);
+int GetTTCCartPrice();
 int getNbItemInCart();
 void FreeArticlelistItem(ArticleList_t* ArticleRef);
 void FreeCart();
+
+extern BuisnessInfo Buisness;
 
 #endif

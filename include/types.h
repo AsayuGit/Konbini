@@ -20,10 +20,16 @@ typedef struct{
     char BarCode[14];
     char SerialNumber[7];
     Date ManifacturingDate;
-    double TVA;
+    unsigned int TVA;
     unsigned int Price;
     int Quantity;
 }Article;
+
+typedef struct{
+    char* BuisnessName;
+    char* BuisnessDetails;
+    char* RCS;
+}BuisnessInfo;
 
 // Integer linked List
 typedef struct IntList {
@@ -38,20 +44,7 @@ typedef struct ArticleList {
     struct ArticleList* next;
 }ArticleList_t;
 
-// Category binary trees
-/*
-typedef struct SubCategoryList {
-    int SubCagegory;
-    ArticleList_t* AList;
-    struct SubCategoryList* next;
-}SubCategoryList_t;
-
-typedef struct CategoryList {
-    int Category;
-    struct SubCategoryList* SubCategoryList;
-    struct CategoryList* next;
-}CategoryList_t;*/
-
+// Category binary tree
 typedef struct IntTree {
     int Data;
     void* LeftChild;

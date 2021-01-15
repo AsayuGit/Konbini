@@ -1,6 +1,11 @@
 #include "system.h"
 
 ArticleList_t* Cart;
+BuisnessInfo Buisness = {
+    "Guud Goods", // Buisness Name
+    "72  Faubourg Saint Honoré 75116", // Buisness Details
+    "RCS PARIS A 818547863"  // RCS
+};
 
 IntTree_t** AddNodeToIntTree(IntTree_t** Tree, int Data){
     while ((*Tree) != NULL){ // Search through the OptimisedDatabase
@@ -166,27 +171,45 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef){
 void DisplayCartContent(){
     int i = 1;
     double CurrentPrice;
-    double Total;
+    int Total;
     ArticleList_t* CartRef;
 
     printf("\n");
     drawLine(89);
     printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity // Price //\n");
     
-    Total = 0.0;
+    Total = 0;
     CartRef = Cart;
     while (CartRef != NULL){
         CurrentPrice = CartRef->Item->Price * CartRef->Quantity;
         printf("// %d) // %s // %s // %s %s // %s // %d/%d/%d // %d // %.2lf $ //\n", i, 
         CartRef->Item->ArticleCode, CartRef->Item->Brand, CartRef->Item->CommunName,
         CartRef->Item->MarketName, CartRef->Item->SerialNumber, CartRef->Item->ManifacturingDate.Day, CartRef->Item->ManifacturingDate.Month, CartRef->Item->ManifacturingDate.Year, CartRef->Quantity, CurrentPrice / 100);
-        Total += CurrentPrice;
+        Total += CurrentPrice  + (CurrentPrice * CartRef->Item->TVA / 100.0) / 100.0;
         CartRef = CartRef->next;
         i++;
     }
 
     drawLine(89);
-    printf("\nYour cart total is : %.2lf $ HT\n", Total / 100);
+    printf("\n%s%.2lf $ TTC\n", labels[CartTotal], (double)(Total / 100.0));
+}
+
+int GetTTCArticleListPrice(ArticleList_t* CartRef){
+    double CurrentPrice;
+    int Total;
+    
+    Total = 0;
+    CartRef = Cart;
+    while (CartRef != NULL){
+        CurrentPrice = CartRef->Item->Price * CartRef->Quantity;
+        Total += CurrentPrice  + (CurrentPrice * CartRef->Item->TVA / 100.0) / 100.0;
+        CartRef = CartRef->next;
+    }
+    return Total;
+}
+
+int GetTTCCartPrice(){
+    return GetTTCArticleListPrice(Cart);
 }
 
 int getNbItemInCart(){
@@ -203,29 +226,20 @@ int getNbItemInCart(){
     return NbOfItems;
 }
 
-int getCartValue(){
-    int Total;
-    ArticleList_t* CartRef;
-
-    Total = 0;
-    CartRef = Cart;
-    while (CartRef != NULL){
-        Total += CartRef->Item->Price * CartRef->Quantity;
-        CartRef = CartRef->next;
-    }
-
-    return Total;
-}
-
 void FreeArticlelistItem(ArticleList_t* ArticleRef){ // Just in case
     free(ArticleRef);
 }
 
+void FreeArticleList(ArticleList_t* ArticleList){
+    if (ArticleList != NULL){
+        FreeArticleList(ArticleList->next);
+    }
+    if (ArticleList){
+        free(ArticleList);
+    }
+}
+
 void FreeCart(){
-    while (Cart != NULL){
-        FreeCart(Cart->next);
-    }
-    if (Cart){
-        free(Cart);
-    }
+    FreeArticleList(Cart);
+    Cart = NULL;
 }
