@@ -38,7 +38,7 @@ void AddElementToIntList(IntList_t** List, int Data){
     }
 }
 
-void PrintIntList(IntList_t* List){
+void PrintIntList(IntList_t* List){ // Mostly a debug function
     int i = 0;
 
     while (List != NULL){
@@ -77,8 +77,6 @@ IntTree_t* GetItemInLeftTree(IntTree_t* Tree, int ID){
 void FreeIntList(IntList_t* List){
     while (List != NULL){
         FreeIntList(List->next);
-    }
-    if (List){
         free(List);
     }
 }

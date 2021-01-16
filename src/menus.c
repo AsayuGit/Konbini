@@ -29,6 +29,10 @@ void* MainMenu(){
                 break;
 
             case 3:
+                return HistoryMenu;
+                break;
+
+            case 4:
                 return NULL;
                 break;
             
@@ -143,6 +147,7 @@ void* BuyMenu(){ // Billing Process
             printf("\n%s\n", labels[ThanksBuy]);
             CrossSleep(5);
             FreeCart();
+            FreeHistory();
             return MainMenu;
         }
 
@@ -208,6 +213,7 @@ void* CatalogueMenu(){
         if (DisplayList->Item->Quantity > 0){
             (DisplayList->Item->Quantity)--;
             AddArticleToCart(DisplayList->Item);
+            AddActionToHistory(ADDItemToCart, DisplayList->Item->MarketName, NULL);
         } else {
             printf("\n%s\n", labels[NotEnoughStock]);
             CrossSleep(1);
@@ -227,6 +233,7 @@ void* CartMenu(){
     int userSelection;
     int PreviousQuantity;
     int i;
+    char buffer[10];
 
     mode = 0;
     while(1){
@@ -296,6 +303,7 @@ void* CartMenu(){
                     CatalogueQuantity = &(selectedItem->Item->Quantity);
                     if (userSelection == 0){ // delete article
                         (*CatalogueQuantity) += selectedItem->Quantity;
+                        AddActionToHistory(DELItemFromCart, selectedItem->Item->MarketName, NULL);
                         DeleteArticleFromCart(selectedItem);
                     } else {
                         // Over stock protection
@@ -314,6 +322,8 @@ void* CartMenu(){
                                 } else {
                                     // All clear
                                     (*CatalogueQuantity) -= (userSelection - PreviousQuantity);
+                                    snprintf(buffer, 10, "%d", userSelection);
+                                    AddActionToHistory(MODItemQuantity, selectedItem->Item->MarketName, buffer);
                                 }
                             }
                         } else if (userSelection < selectedItem->Quantity){
@@ -331,4 +341,18 @@ void* CartMenu(){
     }
     
     return MainMenu;
+}
+
+void* HistoryMenu(){
+    while (1){
+        system(CLEAR);
+        printf("-- History Menu --\n\n");
+        
+        DisplayHistory(2, 3, 0, 999);
+        printf("\n\n%s\n", labels[ToMainMenu]);
+        clear();
+        getchar();
+
+        return MainMenu;
+    }
 }

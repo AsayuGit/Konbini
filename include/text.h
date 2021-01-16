@@ -6,7 +6,7 @@ extern const char errorMsg[][50];
 typedef enum {
     MainMenuTitle,
     MainMenuOptionsFirst,
-    MainMenuOptionsLast = MainMenuOptionsFirst + 2,
+    MainMenuOptionsLast = MainMenuOptionsFirst + 3,
     CatalogueTile,
     CatalogueCategorySelect,
     CatalogueSubCategorySelect,
@@ -28,6 +28,10 @@ typedef enum {
     BILLDate,
     ThanksBuy,
     BILLNb,
+    ADDItemToCart,
+    DELItemFromCart,
+    MODItemQuantity,
+    NOHistory,
     NBOfLabels
 }labelsID;
 

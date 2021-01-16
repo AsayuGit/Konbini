@@ -4,6 +4,8 @@
 #include "include.h"
 #include "catalogue.h"
 
+extern BuisnessInfo Buisness;
+
 void init();
 ArticleList_t* GetItemFromArticleList(ArticleList_t* List, int ArticleID);
 
@@ -19,6 +21,8 @@ int getNbItemInCart();
 void FreeArticlelistItem(ArticleList_t* ArticleRef);
 void FreeCart();
 
-extern BuisnessInfo Buisness;
+History_t** AddActionToHistory(labelsID Message, char* Arg1, char* Arg2);
+void DisplayHistory(int x, int y, int start, int end);
+void FreeHistory();
 
 #endif

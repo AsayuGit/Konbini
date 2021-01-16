@@ -10,7 +10,8 @@ const char labels[NBOfLabels][100] = {
     "-- Menu Principal --",
     "1) Rechercher un article",
     "2) Afficher le panier",
-    "3) Quitter",
+    "3) Afficher l'historique des operations",
+    "4) Quitter",
     "-- Catalogue --",
     ">> Veuillez selectionner une categorie : ",
     ">> Veuillez selectionner une sous categorie : ",
@@ -32,5 +33,9 @@ const char labels[NBOfLabels][100] = {
     "Facture a : ",
     "Facture le : ",
     "Nous vous remercions pour votre achat",
-    "Facture N°"
+    "Facture N°",
+    "- %s ajouté au panier\n",
+    "- %s suprimé du panier\n",
+    "- Quantité de %s modifié a %s\n",
+    "Historique vide"
 };

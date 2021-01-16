@@ -18,5 +18,6 @@
 #include "category.h"
 #include "system.h"
 #include "globalFunctions.h"
+#include "graphics.h"
 
 #endif

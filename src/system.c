@@ -1,4 +1,5 @@
 #include "system.h"
+#include "string.h"
 
 ArticleList_t* Cart;
 BuisnessInfo Buisness = {
@@ -6,6 +7,7 @@ BuisnessInfo Buisness = {
     "72  Faubourg Saint Honoré 75116", // Buisness Details
     "RCS PARIS A 818547863"  // RCS
 };
+History_t* ActionsHistory;
 
 IntTree_t** AddNodeToIntTree(IntTree_t** Tree, int Data){
     while ((*Tree) != NULL){ // Search through the OptimisedDatabase
@@ -58,6 +60,7 @@ void InitCatalogue(IntTree_t** OptimizedDatabase, Article* Database){
 void init(){ // Init Cart and Init Categorry list
     Cart = NULL;
     CategorisedCatalogue = NULL;
+    ActionsHistory = NULL;
 
     InitCatalogue(&CategorisedCatalogue, Catalogue);
 }
@@ -75,22 +78,6 @@ ArticleList_t* GetItemFromArticleList(ArticleList_t* List, int ArticleID){
 
     return List;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ArticleList_t* SearchArticleInCart(Article* ArticleRef){
     ArticleList_t* CartRef;
@@ -233,8 +220,6 @@ void FreeArticlelistItem(ArticleList_t* ArticleRef){ // Just in case
 void FreeArticleList(ArticleList_t* ArticleList){
     if (ArticleList != NULL){
         FreeArticleList(ArticleList->next);
-    }
-    if (ArticleList){
         free(ArticleList);
     }
 }
@@ -242,4 +227,101 @@ void FreeArticleList(ArticleList_t* ArticleList){
 void FreeCart(){
     FreeArticleList(Cart);
     Cart = NULL;
+}
+
+// History Management
+
+History_t** AddActionToHistory(labelsID Message, char* Arg1, char* Arg2){
+    History_t** HistoryRef;
+
+    HistoryRef = &ActionsHistory;
+    while ((*HistoryRef) != NULL){ // Search for a free spot in the history linked list
+        HistoryRef = &((*HistoryRef)->next);
+    }
+
+    (*HistoryRef) = (History_t*)malloc(sizeof(History_t)); // We allocate memory for a new element;
+    (*HistoryRef)->LabelID = Message;
+
+    if (Arg1){
+        (*HistoryRef)->Data1 = (char*)malloc(sizeof(char)*(strlen(Arg1)+1));
+        strcpy((*HistoryRef)->Data1, Arg1);
+    } else {
+        (*HistoryRef)->Data1 = NULL;
+    }
+
+    if (Arg2){
+        (*HistoryRef)->Data2 = (char*)malloc(sizeof(char)*(strlen(Arg2)+1));
+        strcpy((*HistoryRef)->Data2, Arg2);
+    } else {
+        (*HistoryRef)->Data2 = NULL;
+    }
+
+    return HistoryRef;
+}
+
+History_t* GetHistoryElementByIndex(int index){
+    int i;
+    History_t* HistoryRef;
+
+    HistoryRef = ActionsHistory;
+    for (i = 0; i < index; i++){
+        HistoryRef = HistoryRef->next;
+    }
+    
+    return HistoryRef;
+}
+
+void DisplayHistory(int x, int y, int start, int end){
+    History_t* HistoryRef;
+    int i;
+    int maxWidth;
+    int newWidth;
+    int textX, textY;
+    char Buffer[100];
+    
+    maxWidth = 0;
+    textX = x + 2;
+    textY = y + 2;
+    HistoryRef = GetHistoryElementByIndex(start);
+
+    for (i = start; i < end; i++){
+        if (HistoryRef == NULL){
+            break;
+        }
+        SetCursorAt(textX, textY);
+        snprintf(Buffer, 100, labels[HistoryRef->LabelID], HistoryRef->Data1, HistoryRef->Data2);
+        printf("%s\n", Buffer);
+        newWidth = strlen(Buffer);
+        if (newWidth > maxWidth){
+            maxWidth = newWidth;
+        }
+        HistoryRef = HistoryRef->next;
+        textY++;
+    }
+    if (i == start){ // If the history is empty
+        SetCursorAt(textX, textY);
+        snprintf(Buffer, 100, labels[NOHistory]);
+        maxWidth = strlen(Buffer);
+        printf("%s\n", Buffer);
+        i++;
+    }
+    DrawBoxAt(x, y, maxWidth + 4, i - start + 4);
+}
+
+void FreeHistoryObject(History_t* HistoryObject){
+    if (HistoryObject != NULL){
+        FreeHistoryObject(HistoryObject->next);
+        if (HistoryObject->Data1){
+            free(HistoryObject->Data1);
+        }
+        if (HistoryObject->Data2){
+            free(HistoryObject->Data2);
+        }
+        free(HistoryObject);
+    }
+}
+
+void FreeHistory(){
+    FreeHistoryObject(ActionsHistory);
+    ActionsHistory = NULL;
 }

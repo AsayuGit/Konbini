@@ -6,6 +6,7 @@
 void* MainMenu();
 void* CatalogueMenu();
 void* CartMenu();
+void* HistoryMenu();
 
 
 #endif

@@ -2,6 +2,7 @@
 #define _TYPES_H
 
 #include "category.h"
+#include "text.h"
 
 typedef struct{
     int Day;
@@ -43,6 +44,13 @@ typedef struct ArticleList {
     int Quantity;
     struct ArticleList* next;
 }ArticleList_t;
+
+typedef struct History {
+    labelsID LabelID;
+    char* Data1;
+    char* Data2;
+    struct History* next;
+}History_t;
 
 // Category binary tree
 typedef struct IntTree {
