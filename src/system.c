@@ -1,5 +1,5 @@
+#include <string.h>
 #include "system.h"
-#include "string.h"
 
 ArticleList_t* Cart;
 BuisnessInfo Buisness = {
@@ -155,30 +155,117 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef){
     }
 }
 
-void DisplayCartContent(){
-    int i = 1;
-    double CurrentPrice;
-    int Total;
-    ArticleList_t* CartRef;
-
-    printf("\n");
-    drawLine(89);
-    printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity // Price //\n");
+int DisplayArticleListContent(int x, int y, ArticleList_t* List, char CartMode, int* returnWidth, int* returnHeight){
+    int i;
+    int textX, textY;
+    int CurrentPrice;
+    double Total;
+    char Buffer[100];
+    int TempX;
     
-    Total = 0;
-    CartRef = Cart;
-    while (CartRef != NULL){
-        CurrentPrice = CartRef->Item->Price * CartRef->Quantity;
-        printf("// %d) // %s // %s // %s %s // %s // %d/%d/%d // %d // %.2lf $ //\n", i, 
-        CartRef->Item->ArticleCode, CartRef->Item->Brand, CartRef->Item->CommunName,
-        CartRef->Item->MarketName, CartRef->Item->SerialNumber, CartRef->Item->ManifacturingDate.Day, CartRef->Item->ManifacturingDate.Month, CartRef->Item->ManifacturingDate.Year, CartRef->Quantity, CurrentPrice / 100);
-        Total += CurrentPrice  + (CurrentPrice * CartRef->Item->TVA / 100.0) / 100.0;
-        CartRef = CartRef->next;
+    StringList_t* NumberStringList;
+    StringList_t* ArticleCodeStringList;
+    StringList_t* BrandStringList;
+    StringList_t* ProductStringList;
+    StringList_t* SerialStringList;
+    StringList_t* DateStringList;
+    StringList_t* QuantityStringList;
+    StringList_t* PriceStringList;
+    
+    NumberStringList = NULL;
+    ArticleCodeStringList = NULL;
+    BrandStringList = NULL;
+    ProductStringList = NULL;
+    SerialStringList = NULL;
+    DateStringList = NULL;
+    QuantityStringList = NULL;
+    PriceStringList = NULL;
+
+    AddElementToStringList(&NumberStringList, "N°");
+    AddElementToStringList(&NumberStringList, "");
+
+    AddElementToStringList(&ArticleCodeStringList, "Article Code");
+    AddElementToStringList(&ArticleCodeStringList, "");
+
+    AddElementToStringList(&BrandStringList, "Brand");
+    AddElementToStringList(&BrandStringList, "");
+
+    AddElementToStringList(&ProductStringList, "Product");
+    AddElementToStringList(&ProductStringList, "");
+
+    AddElementToStringList(&SerialStringList, "Serial Number");
+    AddElementToStringList(&SerialStringList, "");
+    
+    AddElementToStringList(&DateStringList, "Relevent Date");
+    AddElementToStringList(&DateStringList, "");
+    
+    AddElementToStringList(&QuantityStringList, "Quantity");
+    AddElementToStringList(&QuantityStringList, "");
+    
+    AddElementToStringList(&PriceStringList, "Price");
+    AddElementToStringList(&PriceStringList, "");
+
+    i = 1;
+    while (List != NULL){
+        snprintf(Buffer, 100, "%d)", i);
+        AddElementToStringList(&NumberStringList, Buffer);
+        AddElementToStringList(&ArticleCodeStringList, List->Item->ArticleCode);
+        AddElementToStringList(&BrandStringList, List->Item->Brand);
+        snprintf(Buffer, 100, "%s %s", List->Item->CommunName, List->Item->MarketName);
+        AddElementToStringList(&ProductStringList, Buffer);
+        AddElementToStringList(&SerialStringList, List->Item->SerialNumber);
+        snprintf(Buffer, 100, "%02d/%02d/%04d", List->Item->ManifacturingDate.Day, List->Item->ManifacturingDate.Month, List->Item->ManifacturingDate.Year);
+        AddElementToStringList(&DateStringList, Buffer);
+        if (CartMode){
+            snprintf(Buffer, 100, "%d", List->Quantity);
+        } else {
+            snprintf(Buffer, 100, "%d", List->Item->Quantity);
+        }
+        
+        AddElementToStringList(&QuantityStringList, Buffer);
+        
+        if (CartMode){
+            CurrentPrice = List->Item->Price * List->Quantity;
+            snprintf(Buffer, 100, "%.2lf $", CurrentPrice / 100.0);
+            Total += CurrentPrice  + (CurrentPrice * List->Item->TVA / 100.0) / 100.0;
+        } else {
+            snprintf(Buffer, 100, "%.2lf $", List->Item->Price / 100.0);
+        }
+        
+        AddElementToStringList(&PriceStringList, Buffer);
+        List = List->next;
         i++;
     }
+    DrawStringBoxAt(x, y, NumberStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, ArticleCodeStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, BrandStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, ProductStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, SerialStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, DateStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, QuantityStringList, &TempX, NULL); x+= TempX - 1;
+    DrawStringBoxAt(x, y, PriceStringList, &TempX, returnHeight); x+= TempX - 1;
 
-    drawLine(89);
-    printf("\n%s%.2lf $ TTC\n", labels[CartTotal], (double)(Total / 100.0));
+    FreeStringList(&NumberStringList);
+    FreeStringList(&ArticleCodeStringList);
+    FreeStringList(&BrandStringList);
+    FreeStringList(&ProductStringList);
+    FreeStringList(&SerialStringList);
+    FreeStringList(&DateStringList);
+    FreeStringList(&QuantityStringList);
+    FreeStringList(&PriceStringList);
+
+    if (CartMode)
+        printf("\n\n%s%.2lf $ TTC\n", labels[CartTotal], (double)(Total / 100.0));
+
+    if (returnWidth)
+        (*returnWidth) = x + 2;
+
+    return i;
+}
+
+
+int DisplayCartContent(int x, int y, int* returnWith, int* returnHeight){
+    return DisplayArticleListContent(x, y, Cart, 1, returnWith, returnHeight);
 }
 
 int GetTTCArticleListPrice(ArticleList_t* CartRef){
@@ -274,8 +361,7 @@ History_t* GetHistoryElementByIndex(int index){
 void DisplayHistory(int x, int y, int start, int end){
     History_t* HistoryRef;
     int i;
-    int maxWidth;
-    int newWidth;
+    int maxWidth, newWidth;
     int textX, textY;
     char Buffer[100];
     

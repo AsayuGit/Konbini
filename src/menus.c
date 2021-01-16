@@ -15,6 +15,7 @@ void* MainMenu(){
             printf("%s\n", labels[i]);
         }
         
+        printf("\n%s", labels[MenuSelect]);
         // SecureInput
         if (scanf("%d", &userSelection) == 1){
             // Selection logic
@@ -45,26 +46,39 @@ void* MainMenu(){
     }
 }
 
-IntTree_t* CategoryMenu(IntTree_t* CategoryPointer, char** DisplayLabel){
+IntTree_t* CategoryMenu(IntTree_t* CategoryPointer, char** DisplayLabel, labelsID Question){
     int i;
     int userSelection;
     IntTree_t* DisplayTree;
-    
+    int textX, textY;
+    int maxWidth, newWidth;
+    char Buffer[100];
+
     while (1){
+        textX = 3;
+        textY = 5;
+        maxWidth = 0;
+
         system(CLEAR);
         printf("%s\n\n", labels[CatalogueTile]);
 
-        drawLine(23);
         DisplayTree = CategoryPointer;
         i = 0;
         while (DisplayTree != NULL){
             i++;
-            printf("// %d) %s //\n", i, DisplayLabel[DisplayTree->Data]);
+            SetCursorAt(textX, textY);
+            snprintf(Buffer, 100, "%d) %s\n", i, DisplayLabel[DisplayTree->Data]);
+            printf("%s\n", Buffer);
+            newWidth = strlen(Buffer);
+            if (newWidth > maxWidth){
+                maxWidth = newWidth;
+            }
             DisplayTree = DisplayTree->LeftChild;
+            textY++;
         }
-        drawLine(23);
+        DrawBoxAt(0, 3, maxWidth + 4, i + 4);
         
-        printf("\n%s", labels[CatalogueSubCategorySelect]);
+        printf("\n\n%s", labels[Question]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
             return GetItemInLeftTree(CategoryPointer, userSelection - 1);
@@ -83,7 +97,7 @@ void* BuyMenu(){ // Billing Process
 
     char UserDetails[100];
 
-    int maxWidth = 90;
+    int maxWidth, maxHeight;
     char printNb = 0;
 
     time_t currentTime = time(NULL);
@@ -117,6 +131,8 @@ void* BuyMenu(){ // Billing Process
         system(CLEAR);
         printf("%s\n", labels[BuyMenuTitle]);
 
+        DisplayCartContent(1, 12, &maxWidth, &maxHeight);
+
         // Date
         SetCursorAt(maxWidth - (strlen(labels[BILLDate]) + 11), 3);
         printf("%s%02d/%02d/%02d\n", labels[BILLDate], tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
@@ -127,7 +143,7 @@ void* BuyMenu(){ // Billing Process
         }
 
         // Buisness Side
-        SetCursorAt(0, 6);
+        SetCursorAt(1, 6);
         printf("%s\n\n", labels[BILLFrom]);
         printf("%s\n%s\n%s", Buisness.BuisnessName, Buisness.BuisnessDetails, Buisness.RCS);
 
@@ -139,8 +155,7 @@ void* BuyMenu(){ // Billing Process
         SetCursorAt(maxWidth - strlen(UserDetails), 9);
         printf("%s\n", UserDetails);
 
-        SetCursorAt(0, 11);
-        DisplayCartContent();
+        SetCursorAt(1, 14 + maxHeight);
         printf("\n>> Est ce que tout est en ordre ?\n\n1) Oui (Procéder au paiement)\n2) Non (Retourner au menu principal)\n\n");
 
         if (printNb){
@@ -177,29 +192,18 @@ void* CatalogueMenu(){
 
     ArticleList_t* DisplayList;
 
-    CategoryPointer = CategoryMenu(CategorisedCatalogue, CategoryLabel);
-    SubCategoryPointer = CategoryMenu(CategoryPointer->RightChild, SubCategoryLabel);
+    CategoryPointer = CategoryMenu(CategorisedCatalogue, CategoryLabel, CatalogueCategorySelect);
+    SubCategoryPointer = CategoryMenu(CategoryPointer->RightChild, SubCategoryLabel, CatalogueSubCategorySelect);
 
     while (1){
         system(CLEAR);
         printf("%s\n\n", labels[CatalogueTile]);
         //printf(">> %s / %s / ?\n\n", CategoryLabel[Category], SubCategoryLabel[SubCategory]);
 
-        drawLine(89);
-        printf("// N° // ArticleCode // Brand // Product // Serial Number // Relevent Date // Quantity //\n");
         DisplayList = (ArticleList_t*)(SubCategoryPointer->RightChild);
-        i = 0;
-        while (DisplayList != NULL){
-            i++;
-            printf("// %d) // %s // %s // %s %s // %s // %s // %d //\n", i, 
-            DisplayList->Item->ArticleCode, DisplayList->Item->Brand, DisplayList->Item->CommunName,
-            DisplayList->Item->MarketName, DisplayList->Item->SerialNumber, "DATE", DisplayList->Item->Quantity);
-
-            DisplayList = DisplayList->next;
-        }
-        drawLine(89);
+        i = DisplayArticleListContent(1, 3, DisplayList, 0, NULL, NULL);
         
-        printf("\n%s", labels[CatalogueItemSelect]);
+        printf("\n\n%s", labels[CatalogueItemSelect]);
         // SecureInput
         if ((scanf("%d", &userSelection) == 1) && ((userSelection >= 1) && (userSelection <= i))){
             DisplayList = GetItemFromArticleList((ArticleList_t*)(SubCategoryPointer->RightChild), userSelection - 1);
@@ -241,7 +245,7 @@ void* CartMenu(){
         // Display    
         system(CLEAR);
         printf("%s\n", labels[CartTile]);
-        DisplayCartContent();
+        DisplayCartContent(1, 3, NULL, NULL);
         printf("\n");
 
 
@@ -250,6 +254,8 @@ void* CartMenu(){
             for (i = CartMenuOptionsFirst; i <= CartMenuOptionsLast; i++){
                 printf("%s\n", labels[i]);
             }
+
+            printf("\n%s", labels[MenuSelect]);
             // SecureInput
             if (scanf("%d", &userSelection) == 1){
                 // Selection logic
@@ -283,7 +289,7 @@ void* CartMenu(){
             break;
             
             case 1:
-                printf("%s\n", labels[ModArticleSelect]);
+                printf("%s", labels[ModArticleSelect]);
                 if ((scanf("%d", &userSelection) == 1) && (userSelection > 0)){
                     userSelection--;
                     if ((selectedItem = GetItemFromCart(userSelection)) == NULL){
@@ -349,7 +355,7 @@ void* HistoryMenu(){
         printf("-- History Menu --\n\n");
         
         DisplayHistory(2, 3, 0, 999);
-        printf("\n\n%s\n", labels[ToMainMenu]);
+        printf("\n\n%s", labels[ToMainMenu]);
         clear();
         getchar();
 

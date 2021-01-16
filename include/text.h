@@ -32,6 +32,7 @@ typedef enum {
     DELItemFromCart,
     MODItemQuantity,
     NOHistory,
+    MenuSelect,
     NBOfLabels
 }labelsID;
 

@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "globalFunctions.h"
 
 void DrawBoxAt(int x, int y, int width, int height){
@@ -36,6 +38,34 @@ void DrawBoxAt(int x, int y, int width, int height){
     }
     printf("╝");
 }
-//╔═╗
-//║║║
-//╚═╝
+
+void DrawStringBoxAt(int x, int y, StringList_t* List, int* returnWidth, int* returnHeight){
+    int nbOfLines;
+    int textX, textY;
+    int maxWidth, newWidth;
+
+    textX = x + 2;
+    textY = y + 2;
+    nbOfLines = 0;
+    maxWidth = 0;
+    while (List != NULL){
+        SetCursorAt(textX, textY);
+        printf("%s\n", List->Data);
+        newWidth = strlen(List->Data);
+        if (newWidth > maxWidth){
+            maxWidth = newWidth;
+        }
+        List = List->next;
+        nbOfLines++;
+        textY++;
+    }
+    maxWidth += 4;
+    nbOfLines += 4;
+    DrawBoxAt(x, y, maxWidth, nbOfLines);
+
+    if (returnWidth)
+        (*returnWidth) = maxWidth;
+
+    if (returnHeight)
+        (*returnHeight) = nbOfLines;
+}

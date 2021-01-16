@@ -19,4 +19,7 @@ void FreeIntList(IntList_t* List);
 
 IntTree_t* GetItemInLeftTree(IntTree_t* Tree, int ID);
 
+void AddElementToStringList(StringList_t** List, char* Data);
+void FreeStringList(StringList_t** List);
+
 #endif

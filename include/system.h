@@ -14,7 +14,8 @@ void DeleteArticleFromCart(ArticleList_t* ArticleRef);
 
 ArticleList_t* SearchArticleInCart(Article* ArticleRef);
 ArticleList_t* GetItemFromCart(int ArticleID);
-void DisplayCartContent();
+int DisplayArticleListContent(int x, int y, ArticleList_t* List, char CartMode, int* returnWith, int* returnHeight);
+int DisplayCartContent(int x, int y, int* returnWith, int* returnHeight);
 int GetTTCArticleListPrice(ArticleList_t* CartRef);
 int GetTTCCartPrice();
 int getNbItemInCart();

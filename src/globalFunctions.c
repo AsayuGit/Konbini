@@ -1,5 +1,6 @@
 #include "globalFunctions.h"
 #include "unistd.h"
+#include "string.h"
 
 void SetCursorAt(int X, int Y){
     printf("\033[%d;%dH", Y, X);
@@ -79,4 +80,26 @@ void FreeIntList(IntList_t* List){
         FreeIntList(List->next);
         free(List);
     }
+}
+
+void AddElementToStringList(StringList_t** List, char* Data){
+    if (List != NULL){
+        while ((*List) != NULL){ // Search for a free spot
+            List = &((*List)->next);
+        }
+        (*List) = (StringList_t*)malloc(sizeof(StringList_t));
+        (*List)->Data = (char*)malloc(sizeof(char)*(strlen(Data)+1));
+        strcpy((*List)->Data, Data);
+        (*List)->next = NULL;
+    }
+}
+
+void FreeStringList(StringList_t** List){
+    if ((*List) != NULL){
+        FreeStringList(&((*List)->next));
+        free((*List)->Data);
+        free((*List));
+    }
+
+    (*List) = NULL;
 }

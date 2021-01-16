@@ -38,6 +38,12 @@ typedef struct IntList {
     struct IntList* next;
 }IntList_t;
 
+// String linked list
+typedef struct StringList {
+    char* Data;
+    struct StringList* next;
+}StringList_t;
+
 // Article Linked list (Used for the cart)
 typedef struct ArticleList {
     Article* Item;

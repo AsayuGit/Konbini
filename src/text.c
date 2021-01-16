@@ -19,7 +19,7 @@ const char labels[NBOfLabels][100] = {
     "Voici les articles actuellement en stock :",
     "-- Panier --",
     "-- Checkout --",
-    ">> Appuyez sur une touche pour revenir au menu principal",
+    ">> Appuyez sur une touche pour revenir au menu principal : ",
     "Impossible, votre panier dépasse la valeur maximale autorise",
     "1) Modifier un article",
     "2) Passer au paiement",
@@ -37,5 +37,6 @@ const char labels[NBOfLabels][100] = {
     "- %s ajouté au panier\n",
     "- %s suprimé du panier\n",
     "- Quantité de %s modifié a %s\n",
-    "Historique vide"
+    "Historique vide",
+    ">> Veuillez selectionner la transaction a effectuer : "
 };
