@@ -17,7 +17,7 @@ linux:
 
 windows:
 	clear
-	gcc -o $(FILENAME) $(SOURCES) $(INCLUDES) -D $(WINDOWS_DEFINES)
+	x86_64-w64-mingw32-gcc -o $(FILENAME) $(SOURCES) $(INCLUDES) -D $(WINDOWS_DEFINES)
 
 dependencies:
 

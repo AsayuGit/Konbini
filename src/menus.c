@@ -1,6 +1,7 @@
 #include "menus.h"
-#include "string.h"
-#include "time.h"
+
+#include <string.h>
+#include <time.h>
 
 void* MainMenu(){
     int i;

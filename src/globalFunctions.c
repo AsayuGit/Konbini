@@ -1,6 +1,11 @@
 #include "globalFunctions.h"
-#include "unistd.h"
-#include "string.h"
+
+#include <unistd.h>
+#include <string.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 void SetCursorAt(int X, int Y){
     printf("\033[%d;%dH", Y, X);
