@@ -260,7 +260,7 @@ int DisplayArticleListContent(int x, int y, ArticleList_t* List, char CartMode, 
     if (returnWidth)
         (*returnWidth) = x + 2;
 
-    return i;
+    return i - 1;
 }
 
 
