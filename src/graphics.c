@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#include <wchar.h>
+#endif
+
 #include "globalFunctions.h"
 
 void DrawBoxAt(int x, int y, int width, int height){
@@ -16,27 +20,27 @@ void DrawBoxAt(int x, int y, int width, int height){
         y = 1;
 
     SetCursorAt(x, y);
-    printf("╔");
-    
+    wprintf(BOX_TOPLEFT);
+
     for (compt_lenght = 2; compt_lenght < width; compt_lenght++){
-        printf("═");
+        wprintf(BOX_HLINE);
     }
-    printf("╗");
+    wprintf(BOX_TOPRIGHT);
 
     for (compt_height = 1; compt_height < height - 1; compt_height++){
         SetCursorAt(x, y+compt_height);
-        printf("║");
+        wprintf(BOX_VLINE);
         SetCursorAt(x+width-1, y+compt_height);
-        printf("║");
+        wprintf(BOX_VLINE);
     }
 
     SetCursorAt(x, y+compt_height);
-    printf("╚");
+    wprintf(BOX_BOTTOMLEFT);
     
     for (compt_lenght = 2; compt_lenght < width; compt_lenght++){
-        printf("═");
+        wprintf(BOX_HLINE);
     }
-    printf("╝");
+    wprintf(BOX_BOTTOMRIGHT);
 }
 
 void DrawStringBoxAt(int x, int y, StringList_t* List, int* returnWidth, int* returnHeight){
